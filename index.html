@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro - Motoristas</title>
+    <style>
+        :root {
+            --primary: #667eea;
+            --success: #11998e;
+            --danger: #e74c3c;
+            --gray-light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .btn-action {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-action:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .stat-card .sub {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .input-section {
+            background: var(--gray-light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .input-group input, .input-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, var(--success) 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .days-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .day-item {
+            background: white;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .day-number {
+            background: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .day-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .day-detail label {
+            font-size: 0.7em;
+            color: #666;
+        }
+
+        .day-detail span {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .lucro-positivo {
+            color: var(--success) !important;
+        }
+
+        .lucro-negativo {
+            color: var(--danger) !important;
+        }
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: white;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chart-section {
+            display: none;
+        }
+
+        .chart-section.active {
+            display: block;
+        }
+
+        .chart-wrapper {
+            height: 200px;
+            margin-top: 15px;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 100%;
+            gap: 5px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bar {
+            width: 100%;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 3px 3px 0 0;
+            position: relative;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .bar-label {
+            font-size: 0.7em;
+            margin-top: 5px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .day-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .day-info {
+                grid-template-columns: 1fr 1fr;
+            }
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .day-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Dashboard Financeiro</h1>
+            <p>Controle seus ganhos e custos</p>
+            <div>
+                <button class="btn-action" onclick="exportarDados()">📥 Exportar Dados</button>
+                <button class="btn-action" onclick="limparTudo()">🗑️ Limpar Tudo</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Resumo</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div>Total de Dias</div>
+                    <div class="value" id="totalDias">0</div>
+                    <div class="sub">trabalhados</div>
+                </div>
+                <div class="stat-card" style="background:linear-gradient(135deg,#11998e,#38ef7d)">
+                    <div>Km Total</div>
+                    <div class="value" id="totalKm">0</div>
+                    <div class="sub">rodados</div>
+                </div>
+                <div class="stat-card" style="background:linear-gradient(135deg,#f093fb,#f5576c)">
+                    <div>Ganho Total</div>
+                    <div class="value" id="totalGanho">R$ 0</div>
+                    <div class="sub">bruto</div>
+                </div>
+                <div class="stat-card" style="background:linear-gradient(135deg,#fa709a,#fee140)">
+                    <div>Lucro Líquido</div>
+                    <div class="value" id="totalLucro">R$ 0</div>
+                    <div class="sub">após custos</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚙️ Configurações</h2>
+            <div class="input-section">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Tipo de Veículo</label>
+                        <select id="tipoVeiculo" onchange="atualizarConfiguracoes()">
+                            <option value="proprio">Próprio</option>
+                            <option value="alugado">Alugado</option>
+                            <option value="financiado">Financiado</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Diária (R$)</label>
+                        <input type="number" id="valorDiaria" value="84.06" step="0.01">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Etanol (R$/L)</label>
+                        <input type="number" id="inputEtanol" value="3.80" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label>Gasolina (R$/L)</label>
+                        <input type="number" id="inputGasolina" value="5.20" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label>GNV (R$/m³)</label>
+                        <input type="number" id="inputGNV" value="4.50" step="0.01">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Eletricidade (R$/kWh)</label>
+                        <input type="number" id="inputEletricidade" value="0.80" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label>Consumo (km/unidade)</label>
+                        <input type="number" id="inputConsumo" value="8.2" step="0.1">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>➕ Adicionar Dia</h2>
+            <div class="input-section">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Data</label>
+                        <input type="date" id="inputData">
+                    </div>
+                    <div class="input-group">
+                        <label>Km Rodados</label>
+                        <input type="number" id="inputKm" placeholder="167">
+                    </div>
+                    <div class="input-group">
+                        <label>Ganho/Km (R$)</label>
+                        <input type="number" id="inputGanhoKm" value="1.20" step="0.01">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Combustível/Energia</label>
+                        <select id="tipoCombustivel">
+                            <option value="etanol">⛽ Etanol</option>
+                            <option value="gasolina">⛽ Gasolina</option>
+                            <option value="gnv">🔥 GNV</option>
+                            <option value="eletrico">⚡ Elétrico</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Horas</label>
+                        <input type="number" id="inputHoras" value="8" step="0.5">
+                    </div>
+                    <div class="input-group">
+                        <label>Gorjetas (R$)</label>
+                        <input type="number" id="inputGorjetas" value="0" step="0.01">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="adicionarDia()">✅ Adicionar Dia</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Dias Registrados</h2>
+            <div class="days-list" id="daysList">
+                <div class="empty-state">
+                    <h3>📭 Nenhum dia registrado</h3>
+                    <p>Adicione seu primeiro dia acima!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📈 Gráficos</h2>
+            <div class="tabs">
+                <div class="tab active" onclick="trocarTab('lucro')">💰 Lucro</div>
+                <div class="tab" onclick="trocarTab('combustivel')">⛽ Combustível</div>
+                <div class="tab" onclick="trocarTab('km')">🚗 Km</div>
+            </div>
+
+            <div class="chart-section active" id="chart-lucro">
+                <div class="chart-title">Lucro por Dia</div>
+                <div class="chart-wrapper">
+                    <div class="chart-bars" id="chartLucroBars"></div>
+                </div>
+            </div>
+
+            <div class="chart-section" id="chart-combustivel">
+                <div class="chart-title">Gasto com Combustível</div>
+                <div class="chart-wrapper">
+                    <div class="chart-bars" id="chartCombustivelBars"></div>
+                </div>
+            </div>
+
+            <div class="chart-section" id="chart-km">
+                <div class="chart-title">Km Rodados</div>
+                <div class="chart-wrapper">
+                    <div class="chart-bars" id="chartKmBars"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DADOS
+        let dias = JSON.parse(localStorage.getItem('diasUber')) || [];
+        let config = JSON.parse(localStorage.getItem('configVeiculo')) || {
+            tipo: 'proprio',
+            diaria: 84.06,
+            etanol: 3.80,
+            gasolina: 5.20,
+            gnv: 4.50,
+            eletricidade: 0.80,
+            consumo: 8.2
+        };
+
+        // INICIALIZAR
+        function inicializar() {
+            document.getElementById('inputData').valueAsDate = new Date();
+            carregarConfiguracoes();
+            atualizarTela();
+        }
+
+        function carregarConfiguracoes() {
+            document.getElementById('tipoVeiculo').value = config.tipo;
+            document.getElementById('valorDiaria').value = config.diaria;
+            document.getElementById('inputEtanol').value = config.etanol;
+            document.getElementById('inputGasolina').value = config.gasolina;
+            document.getElementById('inputGNV').value = config.gnv || 4.50;
+            document.getElementById('inputEletricidade').value = config.eletricidade || 0.80;
+            document.getElementById('inputConsumo').value = config.consumo;
+        }
+
+        function atualizarConfiguracoes() {
+            config.tipo = document.getElementById('tipoVeiculo').value;
+            config.diaria = parseFloat(document.getElementById('valorDiaria').value);
+            config.etanol = parseFloat(document.getElementById('inputEtanol').value);
+            config.gasolina = parseFloat(document.getElementById('inputGasolina').value);
+            config.gnv = parseFloat(document.getElementById('inputGNV').value);
+            config.eletricidade = parseFloat(document.getElementById('inputEletricidade').value);
+            config.consumo = parseFloat(document.getElementById('inputConsumo').value);
+            localStorage.setItem('configVeiculo', JSON.stringify(config));
+        }
+
+        // ADICIONAR DIA - VERSÃO MELHORADA
+        function adicionarDia() {
+            // PEGAR VALORES DOS CAMPOS
+            const data = document.getElementById('inputData').value;
+            const km = parseFloat(document.getElementById('inputKm').value);
+            const ganhoKm = parseFloat(document.getElementById('inputGanhoKm').value);
+            const tipoCombustivel = document.getElementById('tipoCombustivel').value;
+            const horas = parseFloat(document.getElementById('inputHoras').value) || 0;
+            const gorjetas = parseFloat(document.getElementById('inputGorjetas').value) || 0;
+
+            // ✅ VALIDAÇÃO INTELIGENTE COM EMOJIS
+            const erros = [];
+
+            if (!data) erros.push('📅 Data do trabalho');
+            if (!km || km <= 0) erros.push('🚗 Km rodados');
+            if (!ganhoKm || ganhoKm <= 0) erros.push('💰 Ganho por km');
+
+            if (erros.length > 0) {
+                alert('❌ Campos obrigatórios:\n\n• ' + erros.join('\n• ') + '\n\n👉 Preencha os campos destacados!');
+                
+                // 🔍 FOCO NO PRIMEIRO CAMPO COM ERRO
+                if (!data) {
+                    document.getElementById('inputData').focus();
+                    document.getElementById('inputData').style.borderColor = '#e74c3c';
+                } else if (!km || km <= 0) {
+                    document.getElementById('inputKm').focus();
+                    document.getElementById('inputKm').style.borderColor = '#e74c3c';
+                } else if (!ganhoKm || ganhoKm <= 0) {
+                    document.getElementById('inputGanhoKm').focus();
+                    document.getElementById('inputGanhoKm').style.borderColor = '#e74c3c';
+                }
+                return;
+            }
+
+            // 🔄 ATUALIZAR CONFIGURAÇÕES
+            atualizarConfiguracoes();
+
+            // 🧮 CÁLCULOS AUTOMÁTICOS
+            const ganhoTotal = (km * ganhoKm) + gorjetas;
+            const litros = km / config.consumo;
+            
+            // CÁLCULO DO CUSTO POR TIPO DE ENERGIA
+            let precoCombustivel = 0;
+            let tipoEnergia = '';
+
+            if (tipoCombustivel === 'etanol') {
+                precoCombustivel = config.etanol;
+                tipoEnergia = 'litros';
+            } else if (tipoCombustivel === 'gasolina') {
+                precoCombustivel = config.gasolina;
+                tipoEnergia = 'litros';
+            } else if (tipoCombustivel === 'gnv') {
+                precoCombustivel = config.gnv;
+                tipoEnergia = 'm³';
+            } else if (tipoCombustivel === 'eletrico') {
+                precoCombustivel = config.eletricidade;
+                tipoEnergia = 'kWh';
+            }
+
+            const combustivel = litros * precoCombustivel;
+            const lucro = ganhoTotal - combustivel - config.diaria;
+
+            // 📊 CRIAR OBJETO DO DIA
+            const dia = {
+                id: Date.now(),
+                data,
+                km,
+                ganhoKm,
+                tipoCombustivel,
+                tipoEnergia,
+                horas,
+                gorjetas,
+                ganhoTotal,
+                combustivel,
+                diaria: config.diaria,
+                lucro
+            };
+
+            // 💾 SALVAR E ATUALIZAR
+            dias.push(dia);
+            dias.sort((a, b) => new Date(a.data) - new Date(b.data));
+            salvarDados();
+            atualizarTela();
+
+            // 📅 AVANÇAR DATA AUTOMATICAMENTE
+            const dataAtual = new Date(document.getElementById('inputData').value);
+            dataAtual.setDate(dataAtual.getDate() + 1);
+            document.getElementById('inputData').valueAsDate = dataAtual;
+
+            // 🎉 CONFIRMAÇÃO
+            alert('✅ Dia adicionado com sucesso!\n\n' +
+                  `🚗 ${km} km rodados\n` +
+                  `💰 R$ ${ganhoTotal.toFixed(2)} ganhos\n` +
+                  `💵 R$ ${lucro.toFixed(2)} lucro líquido`);
+
+            // 🔄 RESETAR ESTILOS DOS CAMPOS
+            document.getElementById('inputData').style.borderColor = '';
+            document.getElementById('inputKm').style.borderColor = '';
+            document.getElementById('inputGanhoKm').style.borderColor = '';
+        }
+
+        // REMOVER DIA
+        function removerDia(id) {
+            if (confirm('🗑️ Remover este dia?')) {
+                dias = dias.filter(d => d.id !== id);
+                salvarDados();
+                atualizarTela();
+            }
+        }
+
+        // ATUALIZAR TELA
+        function atualizarTela() {
+            atualizarResumo();
+            atualizarLista();
+            atualizarGraficos();
+        }
+
+        function atualizarResumo() {
+            const totalDias = dias.length;
+            const totalKm = dias.reduce((sum, d) => sum + d.km, 0);
+            const totalGanho = dias.reduce((sum, d) => sum + d.ganhoTotal, 0);
+            const totalLucro = dias.reduce((sum, d) => sum + d.lucro, 0);
+
+            document.getElementById('totalDias').textContent = totalDias;
+            document.getElementById('totalKm').textContent = totalKm.toFixed(0);
+            document.getElementById('totalGanho').textContent = `R$ ${totalGanho.toFixed(2)}`;
+            document.getElementById('totalLucro').textContent = `R$ ${totalLucro.toFixed(2)}`;
+        }
+
+        function atualizarLista() {
+            const lista = document.getElementById('daysList');
+            
+            if (dias.length === 0) {
+                lista.innerHTML = `
+                    <div class="empty-state">
+                        <h3>📭 Nenhum dia registrado</h3>
+                        <p>Adicione seu primeiro dia acima!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            dias.forEach((dia, index) => {
+                const dataFormatada = new Date(dia.data).toLocaleDateString('pt-BR');
+                const lucroClass = dia.lucro >= 0 ? 'lucro-positivo' : 'lucro-negativo';
+                
+                html += `
+                    <div class="day-item">
+                        <div class="day-number">${index + 1}</div>
+                        <div class="day-info">
+                            <div class="day-detail">
+                                <label>Data</label>
+                                <span>${dataFormatada}</span>
+                            </div>
+                            <div class="day-detail">
+                                <label>Km</label>
+                                <span>${dia.km} km</span>
+                            </div>
+                            <div class="day-detail">
+                                <label>Ganho</label>
+                                <span>R$ ${dia.ganhoTotal.toFixed(2)}</span>
+                            </div>
+                            <div class="day-detail">
+                                <label>Combustível</label>
+                                <span>R$ ${dia.combustivel.toFixed(2)}</span>
+                            </div>
+                            <div class="day-detail">
+                                <label>Lucro</label>
+                                <span class="${lucroClass}">R$ ${dia.lucro.toFixed(2)}</span>
+                            </div>
+                        </div>
+                        <button class="btn-delete" onclick="removerDia(${dia.id})">🗑️</button>
+                    </div>
+                `;
+            });
+
+            lista.innerHTML = html;
+        }
+
+        // GRÁFICOS
+        function atualizarGraficos() {
+            atualizarGraficoLucro();
+            atualizarGraficoCombustivel();
+            atualizarGraficoKm();
+        }
+
+        function atualizarGraficoLucro() {
+            const container = document.getElementById('chartLucroBars');
+            if (dias.length === 0) {
+                container.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
+                return;
+            }
+
+            const maxLucro = Math.max(...dias.map(d => Math.abs(d.lucro)));
+            let html = '';
+
+            dias.forEach((dia, index) => {
+                const altura = maxLucro > 0 ? (Math.abs(dia.lucro) / maxLucro) * 150 : 0;
+                const cor = dia.lucro >= 0 ? '#11998e' : '#e74c3c';
+                
+                html += `
+                    <div class="chart-bar">
+                        <div class="bar" style="height: ${altura}px; background: ${cor};">
+                            <div class="bar-value">R$ ${dia.lucro.toFixed(0)}</div>
+                        </div>
+                        <div class="bar-label">D${index + 1}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function atualizarGraficoCombustivel() {
+            const container = document.getElementById('chartCombustivelBars');
+            if (dias.length === 0) {
+                container.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
+                return;
+            }
+
+            const maxCombustivel = Math.max(...dias.map(d => d.combustivel));
+            let html = '';
+
+            dias.forEach((dia, index) => {
+                const altura = maxCombustivel > 0 ? (dia.combustivel / maxCombustivel) * 150 : 0;
+                
+                html += `
+                    <div class="chart-bar">
+                        <div class="bar" style="height: ${altura}px; background: #e74c3c;">
+                            <div class="bar-value">R$ ${dia.combustivel.toFixed(0)}</div>
+                        </div>
+                        <div class="bar-label">D${index + 1}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function atualizarGraficoKm() {
+            const container = document.getElementById('chartKmBars');
+            if (dias.length === 0) {
+                container.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
+                return;
+            }
+
+            const maxKm = Math.max(...dias.map(d => d.km));
+            let html = '';
+
+            dias.forEach((dia, index) => {
+                const altura = maxKm > 0 ? (dia.km / maxKm) * 150 : 0;
+                
+                html += `
+                    <div class="chart-bar">
+                        <div class="bar" style="height: ${altura}px; background: #667eea;">
+                            <div class="bar-value">${dia.km}</div>
+                        </div>
+                        <div class="bar-label">D${index + 1}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // FUNÇÕES GERAIS
+        function trocarTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.chart-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`chart-${tab}`).classList.add('active');
+        }
+
+        function salvarDados() {
+            localStorage.setItem('diasUber', JSON.stringify(dias));
+        }
+
+        function exportarDados() {
+            if (dias.length === 0) {
+                alert('📭 Não há dados para exportar!');
+                return;
+            }
+            
+            const dados = { config, dias };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dados, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "dados_motorista.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            
+            alert('💾 Dados exportados com sucesso!');
+        }
+
+        function limparTudo() {
+            if (confirm('🗑️ Tem certeza que deseja limpar TODOS os dados?\n\nEsta ação não pode ser desfeita!')) {
+                dias = [];
+                salvarDados();
+                atualizarTela();
+                alert('✅ Todos os dados foram removidos!');
+            }
+        }
+
+        // INICIARRRR
+        window.onload = inicializar;
+    </script>
+</body>
+</html>
