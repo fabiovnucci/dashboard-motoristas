@@ -7,11 +7,54 @@
     <style>
         :root {
             --primary: #667eea;
-            --success: #11998e;
-            --danger: #e74c3c;
-            --gray-light: #f8f9fa;
+            --primary-dark: #5a6fd8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --dark-border: #334155;
+            --dark-text: #e2e8f0;
+            --dark-text-light: #94a3b8;
         }
+.acumulado-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    padding: 20px;
+}
 
+.acumulado-icon {
+    font-size: 3.5em;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+.acumulado-value {
+    font-size: 2.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #10b981; /* Verde padrão para positivo */
+}
+
+.acumulado-value.negativo {
+    color: #ef4444; /* Vermelho para negativo */
+}
+.acumulado-label {
+    color: var(--dark-text-light);
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+.acumulado-dias {
+    color: var(--dark-text-light);
+    font-size: 0.8em;
+    opacity: 0.7;
+}
         * {
             margin: 0;
             padding: 0;
@@ -20,9 +63,10 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
             min-height: 100vh;
             padding: 15px;
+            color: var(--dark-text);
         }
 
         .container {
@@ -33,76 +77,133 @@
         .header {
             text-align: center;
             color: white;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--dark-card) 0%, #2d3748 100%);
+            border-radius: 15px;
+            border: 1px solid var(--dark-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .header h1 {
-            font-size: 1.8em;
+            font-size: 2.2em;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 1.1em;
         }
 
         .btn-action {
-            background: rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            border: 2px solid white;
-            padding: 8px 15px;
-            border-radius: 20px;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
             cursor: pointer;
             margin: 5px;
             transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         .btn-action:hover {
-            background: white;
-            color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
         .card {
-            background: white;
+            background: var(--dark-card);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--dark-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: var(--dark-text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        .info-tooltip {
+            background: linear-gradient(135deg, #1e293b, #2d3748);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 20px;
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 0.9em;
+            color: var(--dark-text-light);
+            border: 1px solid var(--dark-border);
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--dark-card), #2d3748);
             color: white;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
+            border: 1px solid var(--dark-border);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
         }
 
         .stat-card .value {
-            font-size: 1.5em;
+            font-size: 2em;
             font-weight: bold;
-            margin: 5px 0;
+            margin: 10px 0;
+            background: linear-gradient(135deg, var(--dark-text), #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .stat-card .sub {
-            font-size: 0.8em;
-            opacity: 0.9;
+            font-size: 0.85em;
+            opacity: 0.8;
+            color: var(--dark-text-light);
         }
 
         .input-section {
-            background: var(--gray-light);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            background: linear-gradient(135deg, #1e293b, #2d3748);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--dark-border);
         }
 
         .input-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-bottom: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
         .input-group {
@@ -111,74 +212,150 @@
         }
 
         .input-group label {
-            font-size: 0.8em;
+            font-size: 0.85em;
             font-weight: 600;
-            color: #666;
-            margin-bottom: 5px;
+            color: var(--dark-text);
+            margin-bottom: 8px;
+        }
+
+        .input-group small {
+            font-weight: normal;
+            color: var(--dark-text-light);
+            font-size: 0.75em;
+            margin-top: 4px;
         }
 
         .input-group input, .input-group select {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px;
+            background: var(--dark-bg);
+            border: 2px solid var(--dark-border);
+            border-radius: 8px;
             font-size: 1em;
+            color: var(--dark-text);
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group input:read-only {
+            background-color: #374151;
+            color: var(--dark-text-light);
+        }
+
+        .btn-calc {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
         .btn-add {
-            background: linear-gradient(135deg, var(--success) 0%, #38ef7d 100%);
+            background: linear-gradient(135deg, var(--success), #059669);
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 5px;
+            padding: 15px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
         .days-list {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .days-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .days-list::-webkit-scrollbar-track {
+            background: var(--dark-border);
+            border-radius: 10px;
+        }
+
+        .days-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
         }
 
         .day-item {
-            background: white;
-            border-left: 4px solid var(--primary);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            background: linear-gradient(135deg, var(--dark-card), #2d3748);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
             display: grid;
             grid-template-columns: auto 1fr auto;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
+            border: 1px solid var(--dark-border);
+            transition: transform 0.3s;
+        }
+
+        .day-item:hover {
+            transform: translateX(5px);
         }
 
         .day-number {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            width: 35px;
-            height: 35px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         .day-info {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .day-detail {
+            display: flex;
+            flex-direction: column;
         }
 
         .day-detail label {
-            font-size: 0.7em;
-            color: #666;
+            font-size: 0.75em;
+            color: var(--dark-text-light);
+            text-transform: uppercase;
+            margin-bottom: 5px;
         }
 
         .day-detail span {
             font-weight: 600;
-            color: #333;
+            color: var(--dark-text);
+            font-size: 1em;
         }
 
         .lucro-positivo {
@@ -190,33 +367,50 @@
         }
 
         .btn-delete {
-            background: var(--danger);
+            background: linear-gradient(135deg, var(--danger), #dc2626);
             color: white;
             border: none;
-            padding: 6px 10px;
-            border-radius: 4px;
+            padding: 8px 15px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         .tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
+            background: var(--dark-card);
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--dark-border);
         }
 
         .tab {
-            background: white;
-            border: 1px solid var(--primary);
+            background: transparent;
+            border: 2px solid var(--primary);
             color: var(--primary);
-            padding: 8px 15px;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
         }
 
         .tab.active {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
         }
 
         .chart-section {
@@ -227,8 +421,44 @@
             display: block;
         }
 
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--dark-card), #2d3748);
+            border-radius: 10px;
+            border: 1px solid var(--dark-border);
+        }
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-box {
+            background: linear-gradient(135deg, var(--dark-card), #2d3748);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--dark-border);
+        }
+
+        .chart-box-title {
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
         .chart-wrapper {
-            height: 200px;
+            height: 250px;
             margin-top: 15px;
         }
 
@@ -237,7 +467,7 @@
             align-items: flex-end;
             justify-content: space-around;
             height: 100%;
-            gap: 5px;
+            gap: 8px;
         }
 
         .chart-bar {
@@ -249,44 +479,77 @@
 
         .bar {
             width: 100%;
-            background: linear-gradient(to top, #667eea, #764ba2);
-            border-radius: 3px 3px 0 0;
+            background: linear-gradient(to top, var(--primary), var(--primary-dark));
+            border-radius: 6px 6px 0 0;
             position: relative;
+            transition: all 0.3s;
+            min-height: 5px;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+            transform: scaleY(1.05);
         }
 
         .bar-value {
             position: absolute;
-            top: -20px;
+            top: -25px;
             width: 100%;
             text-align: center;
-            font-size: 0.7em;
+            font-size: 0.8em;
             font-weight: bold;
+            color: var(--dark-text);
         }
 
         .bar-label {
-            font-size: 0.7em;
-            margin-top: 5px;
+            font-size: 0.75em;
+            margin-top: 8px;
+            color: var(--dark-text-light);
+            font-weight: 600;
+        }
+
+        .line-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
         }
 
         .empty-state {
             text-align: center;
-            padding: 30px;
-            color: #999;
+            padding: 40px;
+            color: var(--dark-text-light);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 768px) {
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+            
             .day-item {
                 grid-template-columns: 1fr;
                 text-align: center;
+                gap: 15px;
             }
+            
             .day-info {
                 grid-template-columns: 1fr 1fr;
             }
+            
             .input-row {
                 grid-template-columns: 1fr;
             }
+            
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
             }
         }
 
@@ -294,11 +557,22 @@
             body {
                 padding: 10px;
             }
+            
             .stats-grid {
                 grid-template-columns: 1fr;
             }
+            
             .day-info {
                 grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                justify-content: center;
+            }
+            
+            .tab {
+                padding: 8px 15px;
+                font-size: 0.9em;
             }
         }
     </style>
@@ -307,103 +581,128 @@
     <div class="container">
         <div class="header">
             <h1>🚗 Dashboard Financeiro</h1>
-            <p>Controle seus ganhos e custos</p>
+            <p>Controle completo dos seus ganhos e custos como motorista</p>
             <div>
-                <button class="btn-action" onclick="exportarDados()">📥 Exportar Dados</button>
+                <button class="btn-action" onclick="exportarDados()">📥 Exportar JSON</button>
+                <button class="btn-action" onclick="exportarTxt()">📄 Exportar TXT</button>
                 <button class="btn-action" onclick="limparTudo()">🗑️ Limpar Tudo</button>
             </div>
         </div>
 
         <div class="card">
-            <h2>📊 Resumo</h2>
+            <h2>📊 Resumo do Período</h2>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div>Total de Dias</div>
                     <div class="value" id="totalDias">0</div>
-                    <div class="sub">trabalhados</div>
+                    <div class="sub">dias trabalhados</div>
                 </div>
-                <div class="stat-card" style="background:linear-gradient(135deg,#11998e,#38ef7d)">
+                <div class="stat-card">
+                    <div>Horas Totais</div>
+                    <div class="value" id="totalHoras">0</div>
+                    <div class="sub">horas trabalhadas</div>
+                </div>
+                <div class="stat-card">
                     <div>Km Total</div>
                     <div class="value" id="totalKm">0</div>
-                    <div class="sub">rodados</div>
+                    <div class="sub">quilômetros rodados</div>
                 </div>
-                <div class="stat-card" style="background:linear-gradient(135deg,#f093fb,#f5576c)">
-                    <div>Ganho Total</div>
-                    <div class="value" id="totalGanho">R$ 0</div>
-                    <div class="sub">bruto</div>
-                </div>
-                <div class="stat-card" style="background:linear-gradient(135deg,#fa709a,#fee140)">
-                    <div>Lucro Líquido</div>
+                <div class="stat-card">
+                    <div>Lucro Total</div>
                     <div class="value" id="totalLucro">R$ 0</div>
-                    <div class="sub">após custos</div>
+                    <div class="sub">lucro líquido</div>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <h2>⚙️ Configurações</h2>
+            <h2>⚙️ Configurações do Veículo</h2>
+            <div class="info-tooltip">
+                💡 <strong>Configure seus custos fixos:</strong> Aluguel, financiamento, seguro e outros valores que devem ser divididos pelos dias trabalhados.
+            </div>
+            
             <div class="input-section">
                 <div class="input-row">
                     <div class="input-group">
                         <label>Tipo de Veículo</label>
                         <select id="tipoVeiculo" onchange="atualizarConfiguracoes()">
-                            <option value="proprio">Próprio</option>
-                            <option value="alugado">Alugado</option>
-                            <option value="financiado">Financiado</option>
+                            <option value="proprio">🚗 Próprio</option>
+                            <option value="alugado">📋 Alugado</option>
+                            <option value="financiado">💳 Financiado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="info-tooltip">
+                    🔢 <strong>Calculadora de Diária:</strong> Digite o valor total a pagar e em quantos dias quer dividir.
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Valor total a pagar (R$)</label>
+                        <input type="number" id="valorTotal" placeholder="Ex: 84.06" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label>Dividir em quantos dias?</label>
+                        <input type="number" id="diasDivisao" placeholder="Ex: 30" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Diária calculada (R$)</label>
+                        <input type="number" id="valorDiaria" value="84.06" step="0.01" readonly>
+                        <button type="button" class="btn-calc" onclick="calcularDiaria()">
+                            🔢 Calcular Diária
+                        </button>
+                    </div>
+                </div>
+
+                <div class="info-tooltip">
+                    ⛽ <strong>Configurações de Energia/Combustível:</strong> Selecione o tipo e configure os preços.
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Tipo de Energia</label>
+                        <select id="tipoCombustivelConfig" onchange="mostrarPrecoCombustivelConfig()">
+                            <option value="">-- Selecione --</option>
+                            <option value="etanol">⛽ Etanol (litro)</option>
+                            <option value="gasolina">⛽ Gasolina (litro)</option>
+                            <option value="gnv">🔥 GNV (metro cúbico)</option>
+                            <option value="eletrico">⚡ Eletricidade (kWh)</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Diária (R$)</label>
-                        <input type="number" id="valorDiaria" value="84.06" step="0.01">
-                    </div>
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Etanol (R$/L)</label>
-                        <input type="number" id="inputEtanol" value="3.80" step="0.01">
-                    </div>
-                    <div class="input-group">
-                        <label>Gasolina (R$/L)</label>
-                        <input type="number" id="inputGasolina" value="5.20" step="0.01">
-                    </div>
-                    <div class="input-group">
-                        <label>GNV (R$/m³)</label>
-                        <input type="number" id="inputGNV" value="4.50" step="0.01">
-                    </div>
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label>Eletricidade (R$/kWh)</label>
-                        <input type="number" id="inputEletricidade" value="0.80" step="0.01">
+                        <label id="labelPrecoCombustivelConfig">Preço (R$)</label>
+                        <input type="number" id="inputPrecoCombustivelConfig" step="0.01" placeholder="Digite o preço">
                     </div>
                     <div class="input-group">
                         <label>Consumo (km/unidade)</label>
                         <input type="number" id="inputConsumo" value="8.2" step="0.1">
+                        <small>quilômetros por litro, m³ ou kWh</small>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <h2>➕ Adicionar Dia</h2>
+            <h2>➕ Adicionar Dia de Trabalho</h2>
             <div class="input-section">
                 <div class="input-row">
                     <div class="input-group">
-                        <label>Data</label>
+                        <label>Data do Trabalho</label>
                         <input type="date" id="inputData">
                     </div>
                     <div class="input-group">
                         <label>Km Rodados</label>
-                        <input type="number" id="inputKm" placeholder="167">
+                        <input type="number" id="inputKm" placeholder="Ex: 167" min="0">
                     </div>
                     <div class="input-group">
-                        <label>Ganho/Km (R$)</label>
-                        <input type="number" id="inputGanhoKm" value="1.20" step="0.01">
+                        <label>Ganho por Km (R$)</label>
+                        <input type="number" id="inputGanhoKm" value="1.20" step="0.01" min="0">
                     </div>
                 </div>
                 <div class="input-row">
                     <div class="input-group">
-                        <label>Combustível/Energia</label>
+                        <label>Tipo de Combustível/Energia</label>
                         <select id="tipoCombustivel">
                             <option value="etanol">⛽ Etanol</option>
                             <option value="gasolina">⛽ Gasolina</option>
@@ -412,15 +711,15 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Horas</label>
-                        <input type="number" id="inputHoras" value="8" step="0.5">
+                        <label>Horas Trabalhadas</label>
+                        <input type="number" id="inputHoras" value="8" step="0.5" min="0">
                     </div>
                     <div class="input-group">
                         <label>Gorjetas (R$)</label>
-                        <input type="number" id="inputGorjetas" value="0" step="0.01">
+                        <input type="number" id="inputGorjetas" value="0" step="0.01" min="0">
                     </div>
                 </div>
-                <button class="btn-add" onclick="adicionarDia()">✅ Adicionar Dia</button>
+                <button class="btn-add" onclick="adicionarDia()">✅ Adicionar Dia de Trabalho</button>
             </div>
         </div>
 
@@ -428,38 +727,95 @@
             <h2>📋 Dias Registrados</h2>
             <div class="days-list" id="daysList">
                 <div class="empty-state">
-                    <h3>📭 Nenhum dia registrado</h3>
-                    <p>Adicione seu primeiro dia acima!</p>
+                    <h3>📭 Nenhum dia registrado ainda</h3>
+                    <p>Adicione seu primeiro dia de trabalho acima para começar!</p>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <h2>📈 Gráficos</h2>
+            <h2>📈 Análises e Gráficos</h2>
             <div class="tabs">
                 <div class="tab active" onclick="trocarTab('lucro')">💰 Lucro</div>
                 <div class="tab" onclick="trocarTab('combustivel')">⛽ Combustível</div>
-                <div class="tab" onclick="trocarTab('km')">🚗 Km</div>
+                <div class="tab" onclick="trocarTab('km')">🚗 Quilometragem</div>
+                <div class="tab" onclick="trocarTab('horas')">⏰ Horas</div>
             </div>
 
             <div class="chart-section active" id="chart-lucro">
-                <div class="chart-title">Lucro por Dia</div>
-                <div class="chart-wrapper">
-                    <div class="chart-bars" id="chartLucroBars"></div>
+                <div class="chart-title">💰 Análise de Lucro</div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <div class="chart-box-title">📈 Lucro por Dia</div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bars" id="chartLucroBars"></div>
+                        </div>
+                    </div>
+                   <div class="chart-box">
+    <div class="chart-box-title">💰 Lucro Acumulado</div>
+    <div class="chart-wrapper">
+        <div class="acumulado-display" id="lucroAcumuladoDisplay">
+            <div class="acumulado-icon">📈</div>
+            <div class="acumulado-value" id="lucroAcumuladoValue">R$ 0,00</div>
+            <div class="acumulado-label">Total acumulado no período</div>
+            <div class="acumulado-dias" id="lucroAcumuladoDias">0 dias</div>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
 
             <div class="chart-section" id="chart-combustivel">
-                <div class="chart-title">Gasto com Combustível</div>
-                <div class="chart-wrapper">
-                    <div class="chart-bars" id="chartCombustivelBars"></div>
+                <div class="chart-title">⛽ Análise de Combustível</div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <div class="chart-box-title">📈 Gasto por Dia</div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bars" id="chartCombustivelBars"></div>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-box-title">📊 Total Gasto</div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bars" id="chartCombustivelTotal"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="chart-section" id="chart-km">
-                <div class="chart-title">Km Rodados</div>
-                <div class="chart-wrapper">
-                    <div class="chart-bars" id="chartKmBars"></div>
+                <div class="chart-title">🚗 Análise de Quilometragem</div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <div class="chart-box-title">📈 Km por Dia</div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bars" id="chartKmBars"></div>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-box-title">📊 Km Total</div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bars" id="chartKmTotal"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-section" id="chart-horas">
+                <div class="chart-title">⏰ Análise de Horas Trabalhadas</div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <div class="chart-box-title">📈 Horas por Dia</div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bars" id="chartHorasBars"></div>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-box-title">📊 Horas Totais</div>
+                        <div class="chart-wrapper">
+                            <div class="chart-bars" id="chartHorasTotal"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -488,21 +844,68 @@
         function carregarConfiguracoes() {
             document.getElementById('tipoVeiculo').value = config.tipo;
             document.getElementById('valorDiaria').value = config.diaria;
-            document.getElementById('inputEtanol').value = config.etanol;
-            document.getElementById('inputGasolina').value = config.gasolina;
-            document.getElementById('inputGNV').value = config.gnv || 4.50;
-            document.getElementById('inputEletricidade').value = config.eletricidade || 0.80;
             document.getElementById('inputConsumo').value = config.consumo;
+        }
+
+        // CALCULADORA DE DIÁRIA
+        function calcularDiaria() {
+            const valorTotal = parseFloat(document.getElementById('valorTotal').value);
+            const diasDivisao = parseInt(document.getElementById('diasDivisao').value);
+            
+            if (!valorTotal || !diasDivisao) {
+                alert('❌ Preencha o valor total e a quantidade de dias!');
+                return;
+            }
+
+            const diaria = valorTotal / diasDivisao;
+            document.getElementById('valorDiaria').value = diaria.toFixed(2);
+            
+            // Atualiza as configurações
+            config.diaria = diaria;
+            atualizarConfiguracoes();
+            
+            alert(`✅ Diária calculada: R$ ${diaria.toFixed(2)}\n\n` +
+                  `💡 ${valorTotal.toFixed(2)} ÷ ${diasDivisao} dias = R$ ${diaria.toFixed(2)} por dia`);
+        }
+
+        // CONFIGURAÇÃO DE COMBUSTÍVEL DINÂMICA
+        function mostrarPrecoCombustivelConfig() {
+            const tipo = document.getElementById('tipoCombustivelConfig').value;
+            const label = document.getElementById('labelPrecoCombustivelConfig');
+            const input = document.getElementById('inputPrecoCombustivelConfig');
+            
+            if (!tipo) {
+                label.textContent = 'Preço (R$)';
+                input.placeholder = 'Digite o preço';
+                input.value = '';
+                return;
+            }
+
+            const tipos = {
+                'etanol': { label: 'Etanol (R$/L)', valor: config.etanol },
+                'gasolina': { label: 'Gasolina (R$/L)', valor: config.gasolina },
+                'gnv': { label: 'GNV (R$/m³)', valor: config.gnv },
+                'eletrico': { label: 'Eletricidade (R$/kWh)', valor: config.eletricidade }
+            };
+
+            label.textContent = tipos[tipo].label;
+            input.value = tipos[tipo].valor || '';
+            input.placeholder = `Preço do ${tipo}`;
         }
 
         function atualizarConfiguracoes() {
             config.tipo = document.getElementById('tipoVeiculo').value;
             config.diaria = parseFloat(document.getElementById('valorDiaria').value);
-            config.etanol = parseFloat(document.getElementById('inputEtanol').value);
-            config.gasolina = parseFloat(document.getElementById('inputGasolina').value);
-            config.gnv = parseFloat(document.getElementById('inputGNV').value);
-            config.eletricidade = parseFloat(document.getElementById('inputEletricidade').value);
             config.consumo = parseFloat(document.getElementById('inputConsumo').value);
+            
+            // Atualiza preço do combustível selecionado
+            const tipoCombustivel = document.getElementById('tipoCombustivelConfig').value;
+            const precoCombustivel = parseFloat(document.getElementById('inputPrecoCombustivelConfig').value);
+            
+            if (tipoCombustivel && precoCombustivel) {
+                config[tipoCombustivel] = precoCombustivel;
+            }
+            
             localStorage.setItem('configVeiculo', JSON.stringify(config));
         }
 
@@ -529,13 +932,13 @@
                 // 🔍 FOCO NO PRIMEIRO CAMPO COM ERRO
                 if (!data) {
                     document.getElementById('inputData').focus();
-                    document.getElementById('inputData').style.borderColor = '#e74c3c';
+                    document.getElementById('inputData').style.borderColor = '#ef4444';
                 } else if (!km || km <= 0) {
                     document.getElementById('inputKm').focus();
-                    document.getElementById('inputKm').style.borderColor = '#e74c3c';
+                    document.getElementById('inputKm').style.borderColor = '#ef4444';
                 } else if (!ganhoKm || ganhoKm <= 0) {
                     document.getElementById('inputGanhoKm').focus();
-                    document.getElementById('inputGanhoKm').style.borderColor = '#e74c3c';
+                    document.getElementById('inputGanhoKm').style.borderColor = '#ef4444';
                 }
                 return;
             }
@@ -553,10 +956,10 @@
 
             if (tipoCombustivel === 'etanol') {
                 precoCombustivel = config.etanol;
-                tipoEnergia = 'litros';
+                tipoEnergia = 'L';
             } else if (tipoCombustivel === 'gasolina') {
                 precoCombustivel = config.gasolina;
-                tipoEnergia = 'litros';
+                tipoEnergia = 'L';
             } else if (tipoCombustivel === 'gnv') {
                 precoCombustivel = config.gnv;
                 tipoEnergia = 'm³';
@@ -598,6 +1001,7 @@
             // 🎉 CONFIRMAÇÃO
             alert('✅ Dia adicionado com sucesso!\n\n' +
                   `🚗 ${km} km rodados\n` +
+                  `⏰ ${horas} horas trabalhadas\n` +
                   `💰 R$ ${ganhoTotal.toFixed(2)} ganhos\n` +
                   `💵 R$ ${lucro.toFixed(2)} lucro líquido`);
 
@@ -609,7 +1013,7 @@
 
         // REMOVER DIA
         function removerDia(id) {
-            if (confirm('🗑️ Remover este dia?')) {
+            if (confirm('🗑️ Tem certeza que deseja remover este dia?')) {
                 dias = dias.filter(d => d.id !== id);
                 salvarDados();
                 atualizarTela();
@@ -628,10 +1032,11 @@
             const totalKm = dias.reduce((sum, d) => sum + d.km, 0);
             const totalGanho = dias.reduce((sum, d) => sum + d.ganhoTotal, 0);
             const totalLucro = dias.reduce((sum, d) => sum + d.lucro, 0);
+            const totalHoras = dias.reduce((sum, d) => sum + d.horas, 0);
 
             document.getElementById('totalDias').textContent = totalDias;
+            document.getElementById('totalHoras').textContent = totalHoras;
             document.getElementById('totalKm').textContent = totalKm.toFixed(0);
-            document.getElementById('totalGanho').textContent = `R$ ${totalGanho.toFixed(2)}`;
             document.getElementById('totalLucro').textContent = `R$ ${totalLucro.toFixed(2)}`;
         }
 
@@ -641,8 +1046,8 @@
             if (dias.length === 0) {
                 lista.innerHTML = `
                     <div class="empty-state">
-                        <h3>📭 Nenhum dia registrado</h3>
-                        <p>Adicione seu primeiro dia acima!</p>
+                        <h3>📭 Nenhum dia registrado ainda</h3>
+                        <p>Adicione seu primeiro dia de trabalho acima para começar!</p>
                     </div>
                 `;
                 return;
@@ -660,6 +1065,10 @@
                             <div class="day-detail">
                                 <label>Data</label>
                                 <span>${dataFormatada}</span>
+                            </div>
+                            <div class="day-detail">
+                                <label>Horas</label>
+                                <span>${dia.horas}h</span>
                             </div>
                             <div class="day-detail">
                                 <label>Km</label>
@@ -691,51 +1100,84 @@
             atualizarGraficoLucro();
             atualizarGraficoCombustivel();
             atualizarGraficoKm();
+            atualizarGraficoHoras();
         }
+function atualizarGraficoLucro() {
+    const container = document.getElementById('chartLucroBars');
+    const acumuladoDisplay = document.getElementById('lucroAcumuladoValue');
+    const acumuladoDias = document.getElementById('lucroAcumuladoDias');
+    
+    if (dias.length === 0) {
+        container.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
+        acumuladoDisplay.textContent = 'R$ 0,00';
+        acumuladoDias.textContent = '0 dias';
+        return;
+    }
 
-        function atualizarGraficoLucro() {
-            const container = document.getElementById('chartLucroBars');
-            if (dias.length === 0) {
-                container.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
-                return;
-            }
+    // Calcular lucro acumulado
+    const lucroAcumulado = dias.reduce((sum, d) => sum + d.lucro, 0);
+    const totalDias = dias.length;
 
-            const maxLucro = Math.max(...dias.map(d => Math.abs(d.lucro)));
-            let html = '';
+    // Atualizar display do acumulado
+    acumuladoDisplay.textContent = `R$ ${lucroAcumulado.toFixed(2)}`;
+    acumuladoDias.textContent = `${totalDias} dias`;
+    
+    // Aplicar cor baseada no valor (verde para positivo, vermelho para negativo)
+    
+// Aplicar cor baseada no valor (verde para positivo, vermelho para negativo)
+if (lucroAcumulado >= 0) {
+    acumuladoDisplay.style.color = '#10b981';
+    acumuladoDisplay.classList.remove('negativo');
+} else {
+    acumuladoDisplay.style.color = '#ef4444';
+    acumuladoDisplay.classList.add('negativo');
+}
+    // Gráfico de barras
+    const maxLucro = Math.max(...dias.map(d => Math.abs(d.lucro)));
+    let html = '';
 
-            dias.forEach((dia, index) => {
-                const altura = maxLucro > 0 ? (Math.abs(dia.lucro) / maxLucro) * 150 : 0;
-                const cor = dia.lucro >= 0 ? '#11998e' : '#e74c3c';
-                
-                html += `
-                    <div class="chart-bar">
-                        <div class="bar" style="height: ${altura}px; background: ${cor};">
-                            <div class="bar-value">R$ ${dia.lucro.toFixed(0)}</div>
-                        </div>
-                        <div class="bar-label">D${index + 1}</div>
-                    </div>
-                `;
-            });
+    dias.forEach((dia, index) => {
+        const altura = maxLucro > 0 ? (Math.abs(dia.lucro) / maxLucro) * 180 : 0;
+        const cor = dia.lucro >= 0 ? 
+            'linear-gradient(to top, #10b981, #059669)' : 
+            'linear-gradient(to top, #ef4444, #dc2626)';
+        
+        html += `
+            <div class="chart-bar">
+                <div class="bar" style="height: ${altura}px; background: ${cor};">
+                    <div class="bar-value">R$ ${dia.lucro.toFixed(0)}</div>
+                </div>
+                <div class="bar-label">D${index + 1}</div>
+            </div>
+        `;
+    });
 
-            container.innerHTML = html;
-        }
+    container.innerHTML = html;
+}
 
+        
         function atualizarGraficoCombustivel() {
             const container = document.getElementById('chartCombustivelBars');
+            const containerTotal = document.getElementById('chartCombustivelTotal');
+            
             if (dias.length === 0) {
-                container.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
+                container.innerHTML = containerTotal.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
                 return;
             }
 
             const maxCombustivel = Math.max(...dias.map(d => d.combustivel));
-            let html = '';
+            const totalCombustivel = dias.reduce((sum, d) => sum + d.combustivel, 0);
+            
+            let htmlBars = '';
+            let htmlTotal = '';
 
+            // Gráfico de barras por dia
             dias.forEach((dia, index) => {
-                const altura = maxCombustivel > 0 ? (dia.combustivel / maxCombustivel) * 150 : 0;
+                const altura = maxCombustivel > 0 ? (dia.combustivel / maxCombustivel) * 180 : 0;
                 
-                html += `
+                htmlBars += `
                     <div class="chart-bar">
-                        <div class="bar" style="height: ${altura}px; background: #e74c3c;">
+                        <div class="bar" style="height: ${altura}px; background: linear-gradient(to top, #ef4444, #dc2626);">
                             <div class="bar-value">R$ ${dia.combustivel.toFixed(0)}</div>
                         </div>
                         <div class="bar-label">D${index + 1}</div>
@@ -743,25 +1185,41 @@
                 `;
             });
 
-            container.innerHTML = html;
+            // Gráfico de total
+            htmlTotal = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                    <div style="font-size: 3em; color: #ef4444; margin-bottom: 10px;">⛽</div>
+                    <div style="font-size: 2em; font-weight: bold; color: #ef4444; margin-bottom: 5px;">R$ ${totalCombustivel.toFixed(2)}</div>
+                    <div style="color: #94a3b8; text-align: center;">Total gasto com<br>combustível</div>
+                </div>
+            `;
+
+            container.innerHTML = htmlBars;
+            containerTotal.innerHTML = htmlTotal;
         }
 
         function atualizarGraficoKm() {
             const container = document.getElementById('chartKmBars');
+            const containerTotal = document.getElementById('chartKmTotal');
+            
             if (dias.length === 0) {
-                container.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
+                container.innerHTML = containerTotal.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
                 return;
             }
 
             const maxKm = Math.max(...dias.map(d => d.km));
-            let html = '';
+            const totalKm = dias.reduce((sum, d) => sum + d.km, 0);
+            
+            let htmlBars = '';
+            let htmlTotal = '';
 
+            // Gráfico de barras por dia
             dias.forEach((dia, index) => {
-                const altura = maxKm > 0 ? (dia.km / maxKm) * 150 : 0;
+                const altura = maxKm > 0 ? (dia.km / maxKm) * 180 : 0;
                 
-                html += `
+                htmlBars += `
                     <div class="chart-bar">
-                        <div class="bar" style="height: ${altura}px; background: #667eea;">
+                        <div class="bar" style="height: ${altura}px; background: linear-gradient(to top, #667eea, #5a6fd8);">
                             <div class="bar-value">${dia.km}</div>
                         </div>
                         <div class="bar-label">D${index + 1}</div>
@@ -769,7 +1227,59 @@
                 `;
             });
 
-            container.innerHTML = html;
+            // Gráfico de total
+            htmlTotal = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                    <div style="font-size: 3em; color: #667eea; margin-bottom: 10px;">🚗</div>
+                    <div style="font-size: 2em; font-weight: bold; color: #667eea; margin-bottom: 5px;">${totalKm} km</div>
+                    <div style="color: #94a3b8; text-align: center;">Total de<br>quilômetros rodados</div>
+                </div>
+            `;
+
+            container.innerHTML = htmlBars;
+            containerTotal.innerHTML = htmlTotal;
+        }
+
+        function atualizarGraficoHoras() {
+            const container = document.getElementById('chartHorasBars');
+            const containerTotal = document.getElementById('chartHorasTotal');
+            
+            if (dias.length === 0) {
+                container.innerHTML = containerTotal.innerHTML = '<div class="empty-state">📊 Adicione dias para ver os gráficos</div>';
+                return;
+            }
+
+            const maxHoras = Math.max(...dias.map(d => d.horas));
+            const totalHoras = dias.reduce((sum, d) => sum + d.horas, 0);
+            
+            let htmlBars = '';
+            let htmlTotal = '';
+
+            // Gráfico de barras por dia
+            dias.forEach((dia, index) => {
+                const altura = maxHoras > 0 ? (dia.horas / maxHoras) * 180 : 0;
+                
+                htmlBars += `
+                    <div class="chart-bar">
+                        <div class="bar" style="height: ${altura}px; background: linear-gradient(to top, #8b5cf6, #7c3aed);">
+                            <div class="bar-value">${dia.horas}h</div>
+                        </div>
+                        <div class="bar-label">D${index + 1}</div>
+                    </div>
+                `;
+            });
+
+            // Gráfico de total
+            htmlTotal = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                    <div style="font-size: 3em; color: #8b5cf6; margin-bottom: 10px;">⏰</div>
+                    <div style="font-size: 2em; font-weight: bold; color: #8b5cf6; margin-bottom: 5px;">${totalHoras} h</div>
+                    <div style="color: #94a3b8; text-align: center;">Total de horas<br>trabalhadas</div>
+                </div>
+            `;
+
+            container.innerHTML = htmlBars;
+            containerTotal.innerHTML = htmlTotal;
         }
 
         // FUNÇÕES GERAIS
@@ -795,24 +1305,111 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dados, null, 2));
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "dados_motorista.json");
+            downloadAnchorNode.setAttribute("download", `backup_motorista_${new Date().toISOString().slice(0,10)}.json`);
             document.body.appendChild(downloadAnchorNode);
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
             
-            alert('💾 Dados exportados com sucesso!');
+            alert('💾 Backup JSON exportado com sucesso!\n\n💡 Use este arquivo para restaurar seus dados.');
+        }
+
+        function exportarTxt() {
+            if (dias.length === 0) {
+                alert('📭 Não há dados para exportar!');
+                return;
+            }
+            
+            // Cabeçalho do relatório
+            let txtContent = '🚗 DASHBOARD FINANCEIRO - MOTORISTAS\n';
+            txtContent += '📊 RELATÓRIO COMPLETO\n';
+            txtContent += `📅 Gerado em: ${new Date().toLocaleDateString('pt-BR')}\n`;
+            txtContent += '='.repeat(50) + '\n\n';
+            
+            // Configurações
+            txtContent += '⚙️ CONFIGURAÇÕES:\n';
+            txtContent += `Tipo de Veículo: ${config.tipo}\n`;
+            txtContent += `Diária: R$ ${config.diaria.toFixed(2)}\n`;
+            txtContent += `Consumo: ${config.consumo} km/unidade\n`;
+            txtContent += `Etanol: R$ ${config.etanol}/L\n`;
+            txtContent += `Gasolina: R$ ${config.gasolina}/L\n`;
+            txtContent += `GNV: R$ ${config.gnv}/m³\n`;
+            txtContent += `Eletricidade: R$ ${config.eletricidade}/kWh\n\n`;
+            
+            // Resumo
+            const totalDias = dias.length;
+            const totalKm = dias.reduce((sum, d) => sum + d.km, 0);
+            const totalGanho = dias.reduce((sum, d) => sum + d.ganhoTotal, 0);
+            const totalLucro = dias.reduce((sum, d) => sum + d.lucro, 0);
+            const totalHoras = dias.reduce((sum, d) => sum + d.horas, 0);
+            
+            txtContent += '📈 RESUMO GERAL:\n';
+            txtContent += `Total de Dias: ${totalDias}\n`;
+            txtContent += `Total de Horas: ${totalHoras}h\n`;
+            txtContent += `Km Total: ${totalKm} km\n`;
+            txtContent += `Ganho Total: R$ ${totalGanho.toFixed(2)}\n`;
+            txtContent += `Lucro Total: R$ ${totalLucro.toFixed(2)}\n`;
+            txtContent += `Média por Dia: R$ ${(totalLucro / totalDias).toFixed(2)}\n`;
+            txtContent += `Média por Hora: R$ ${(totalLucro / totalHoras).toFixed(2)}\n\n`;
+            
+            // Dias detalhados
+            txtContent += '📋 DIAS DETALHADOS:\n';
+            txtContent += '='.repeat(80) + '\n';
+            
+            dias.forEach((dia, index) => {
+                const dataFormatada = new Date(dia.data).toLocaleDateString('pt-BR');
+                
+                txtContent += `DIA ${index + 1}:\n`;
+                txtContent += `📅 Data: ${dataFormatada}\n`;
+                txtContent += `⏰ Horas: ${dia.horas}h\n`;
+                txtContent += `🚗 Km: ${dia.km} km\n`;
+                txtContent += `💰 Ganho/Km: R$ ${dia.ganhoKm.toFixed(2)}\n`;
+                txtContent += `💵 Ganho Total: R$ ${dia.ganhoTotal.toFixed(2)}\n`;
+                txtContent += `⛽ Combustível: ${dia.tipoCombustivel} - R$ ${dia.combustivel.toFixed(2)}\n`;
+                txtContent += `📦 Diária: R$ ${dia.diaria.toFixed(2)}\n`;
+                txtContent += `✅ Lucro: R$ ${dia.lucro.toFixed(2)} ${dia.lucro >= 0 ? '🟢' : '🔴'}\n`;
+                
+                txtContent += '-'.repeat(40) + '\n';
+            });
+            
+            // Análises
+            txtContent += '\n📊 ANÁLISES:\n';
+            
+            // Melhor e pior dia
+            const melhorDia = dias.reduce((best, dia) => dia.lucro > best.lucro ? dia : best);
+            const piorDia = dias.reduce((worst, dia) => dia.lucro < worst.lucro ? dia : worst);
+            
+            txtContent += `🏆 Melhor Dia: ${new Date(melhorDia.data).toLocaleDateString('pt-BR')} - R$ ${melhorDia.lucro.toFixed(2)}\n`;
+            txtContent += `📉 Pior Dia: ${new Date(piorDia.data).toLocaleDateString('pt-BR')} - R$ ${piorDia.lucro.toFixed(2)}\n`;
+            
+            // Médias
+            txtContent += `📊 Média de Km/Dia: ${(totalKm / totalDias).toFixed(1)} km\n`;
+            txtContent += `📊 Média de Horas/Dia: ${(totalHoras / totalDias).toFixed(1)}h\n`;
+            txtContent += `📊 Custo por Km: R$ ${((totalGanho - totalLucro) / totalKm).toFixed(3)}\n\n`;
+            
+            txtContent += '💡 Dica: Mantenha o controle diário para melhorar seus resultados!';
+            
+            // Criar e baixar arquivo
+            const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(txtContent);
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `relatorio_motorista_${new Date().toISOString().slice(0,10)}.txt`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            
+            alert('📄 Relatório TXT exportado com sucesso!\n\n💡 Abra no Bloco de Notas ou qualquer editor de texto.');
         }
 
         function limparTudo() {
-            if (confirm('🗑️ Tem certeza que deseja limpar TODOS os dados?\n\nEsta ação não pode ser desfeita!')) {
+            if (confirm('🗑️ Tem certeza que deseja limpar TODOS os dados?\n\n⚠️ Esta ação não pode ser desfeita!')) {
                 dias = [];
                 salvarDados();
                 atualizarTela();
-                alert('✅ Todos os dados foram removidos!');
+                alert('✅ Todos os dados foram removidos com sucesso!');
             }
         }
 
-        // INICIARRRR
+        // INICIAR
         window.onload = inicializar;
     </script>
 </body>
